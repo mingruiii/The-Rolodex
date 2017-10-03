@@ -28,7 +28,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: select the last card in the person list -> selected */
         Index personCount = Index.fromOneBased(getTypicalPersons().size());
-        command = SelectCommand.COMMAND_WORD + " " + personCount.getOneBased();
+        command = SelectCommand.COMMAND_WORD_ABBREV + " " + personCount.getOneBased();
         assertCommandSuccess(command, personCount);
 
         /* Case: undo previous selection -> rejected */
@@ -48,7 +48,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: invalid index (size + 1) -> rejected */
         int invalidIndex = getModel().getFilteredPersonList().size() + 1;
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(SelectCommand.COMMAND_WORD_ABBREV + " " + invalidIndex, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         /* Case: select the current selected card -> selected */
         assertCommandSuccess(command, middleIndex);
@@ -67,7 +67,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, validIndex);
 
         /* Case: invalid index (0) -> rejected */
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + 0,
+        assertCommandFailure(SelectCommand.COMMAND_WORD_ABBREV + " " + 0,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: invalid index (-1) -> rejected */
@@ -75,7 +75,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: invalid arguments (alphabets) -> rejected */
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " abc",
+        assertCommandFailure(SelectCommand.COMMAND_WORD_ABBREV + " abc",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: invalid arguments (extra argument) -> rejected */

@@ -40,6 +40,9 @@ public class HelpWindowTest extends AddressBookGuiTest {
         //use command box
         runCommand(HelpCommand.COMMAND_WORD);
         assertHelpWindowOpen();
+
+        runCommand(HelpCommand.COMMAND_WORD_ABBREV);
+        assertHelpWindowOpen();
     }
 
     /**

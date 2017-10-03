@@ -31,7 +31,7 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardUnchanged();
 
         /* Case: redo clearing address book -> cleared */
-        command = RedoCommand.COMMAND_WORD;
+        command = RedoCommand.COMMAND_WORD_ABBREV;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, expectedResultMessage, new ModelManager());
         assertSelectedCardUnchanged();
@@ -43,7 +43,7 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertSelectedCardDeselected();
 
         /* Case: filters the person list before clearing -> entire address book cleared */
-        executeCommand(UndoCommand.COMMAND_WORD); // restores the original address book
+        executeCommand(UndoCommand.COMMAND_WORD_ABBREV); // restores the original address book
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         assertCommandSuccess(ClearCommand.COMMAND_WORD);
         assertSelectedCardUnchanged();
