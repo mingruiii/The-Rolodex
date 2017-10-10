@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
@@ -28,13 +29,31 @@ public class CommandBox extends UiPart<Region> {
     private ListElementPointer historySnapshot;
 
     @FXML
-    private TextField commandTextField;
+    private ComboBox commandComboBox;
+    private TextField commandTextField = commandComboBox.getEditor();
 
     public CommandBox(Logic logic) {
         super(FXML);
         this.logic = logic;
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
-        commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+
+        commandComboBox.setEditable(true);
+        commandComboBox.setPromptText("Enter your command here");
+        //commandTextField.setFocusTraversable(true);
+        commandComboBox.getItems().addAll(
+                "add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]",
+                "clear",
+                "delete INDEX",
+                "edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]",
+                "find KEYWORD [MORE_KEYWORDS]",
+                "help",
+                "history",
+                "list",
+                "redo",
+                "select INDEX",
+                "undo"
+                );
+        commandComboBox.getEditor().textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         historySnapshot = logic.getHistorySnapshot();
     }
 
@@ -105,7 +124,8 @@ public class CommandBox extends UiPart<Region> {
             initHistory();
             historySnapshot.next();
             // process result of the command
-            commandTextField.setText("");
+            commandComboBox.setValue("");
+            setStyleToDefault();
             logger.info("Result: " + commandResult.feedbackToUser);
             raise(new NewResultAvailableEvent(commandResult.feedbackToUser));
 
@@ -132,7 +152,7 @@ public class CommandBox extends UiPart<Region> {
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {
-        commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
+        commandComboBox.getEditor().getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
     /**

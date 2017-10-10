@@ -1,6 +1,7 @@
 package guitests.guihandles;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import seedu.address.ui.CommandBox;
@@ -8,11 +9,11 @@ import seedu.address.ui.CommandBox;
 /**
  * A handle to the {@code CommandBox} in the GUI.
  */
-public class CommandBoxHandle extends NodeHandle<TextField> {
+public class CommandBoxHandle extends NodeHandle<ComboBox> {
 
-    public static final String COMMAND_INPUT_FIELD_ID = "#commandTextField";
+    public static final String COMMAND_INPUT_FIELD_ID = "#commandComboBox";
 
-    public CommandBoxHandle(TextField commandBoxNode) {
+    public CommandBoxHandle(ComboBox commandBoxNode) {
         super(commandBoxNode);
     }
 
@@ -20,7 +21,7 @@ public class CommandBoxHandle extends NodeHandle<TextField> {
      * Returns the text in the command box.
      */
     public String getInput() {
-        return getRootNode().getText();
+        return getRootNode().getEditor().getText();
     }
 
     /**
@@ -29,7 +30,7 @@ public class CommandBoxHandle extends NodeHandle<TextField> {
      */
     public boolean run(String command) {
         click();
-        guiRobot.interact(() -> getRootNode().setText(command));
+        guiRobot.interact(() -> getRootNode().getEditor().setText(command));
         guiRobot.pauseForHuman();
 
         guiRobot.type(KeyCode.ENTER);
@@ -41,6 +42,6 @@ public class CommandBoxHandle extends NodeHandle<TextField> {
      * Returns the list of style classes present in the command box.
      */
     public ObservableList<String> getStyleClass() {
-        return getRootNode().getStyleClass();
+        return getRootNode().getEditor().getStyleClass();
     }
 }
