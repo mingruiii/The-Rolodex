@@ -1,4 +1,4 @@
-= AddressBook Level 4 - User Guide
+= Rolodex - User Guide
 :toc:
 :toc-title:
 :toc-placement: preamble
@@ -10,9 +10,9 @@ ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4
+:repoURL: https://github.com/CS2103AUG2017-W11-B2/main
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team Rolodex`      Since: `Sep 2017`      Licence: `MIT`
 
 == Quick Start
 
@@ -94,6 +94,7 @@ Edits the phone number and email address of the 1st person to be `91234567` and 
 * `e 2 n/Betsy Crower t/` +
 Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
+// tag::find[]
 === Locating persons in address book: `find` or `f` or `search`
 
 Finds persons in the address book. +
@@ -124,6 +125,7 @@ Returns any person having names `Betsy`, `Tim`, or `John`
 Returns any person having tag `School`
 * `find School werk` +
 Returns any person having tag `School` or tag `werk`
+// end::find[]
 
 === Deleting a person : `delete` or `d`
 
