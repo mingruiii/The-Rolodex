@@ -30,17 +30,15 @@ public class CommandBox extends UiPart<Region> {
     private ListElementPointer historySnapshot;
 
     @FXML
+    //changed the TextField to a ComboBox to enable drop-down list
     private ComboBox<String> commandComboBox;
     private TextField commandTextField = commandComboBox.getEditor();
 
     public CommandBox(Logic logic) {
         super(FXML);
         this.logic = logic;
-        // calls #setStyleToDefault() whenever there is a change to the text of the command box.
-
         commandComboBox.setEditable(true);
         commandComboBox.setPromptText("Enter your command here");
-        //commandTextField.setFocusTraversable(true);
         commandComboBox.getItems().addAll(
                 "add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]",
                 "clear",
@@ -63,7 +61,7 @@ public class CommandBox extends UiPart<Region> {
                 navigateToNextInput();
             }
         });
-
+        // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandComboBox.getEditor().textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         historySnapshot = logic.getHistorySnapshot();
     }
