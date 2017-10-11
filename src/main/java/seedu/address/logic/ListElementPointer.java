@@ -59,7 +59,7 @@ public class ListElementPointer {
     }
 
     public void increaseIndexByOne() {
-         index++;
+        index++;
     }
 
     /**
