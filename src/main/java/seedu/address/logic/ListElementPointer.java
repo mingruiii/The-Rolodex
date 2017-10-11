@@ -58,6 +58,10 @@ public class ListElementPointer {
         return index >= 0 && index < list.size();
     }
 
+    public void increaseIndexByOne() {
+         index++;
+    }
+
     /**
      * Returns the next element in the list and advances the cursor position.
      * @throws NoSuchElementException if there is no more next element in the list.

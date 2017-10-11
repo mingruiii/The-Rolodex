@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
@@ -29,7 +30,7 @@ public class CommandBox extends UiPart<Region> {
     private ListElementPointer historySnapshot;
 
     @FXML
-    private ComboBox commandComboBox;
+    private ComboBox<String> commandComboBox;
     private TextField commandTextField = commandComboBox.getEditor();
 
     public CommandBox(Logic logic) {
@@ -53,31 +54,20 @@ public class CommandBox extends UiPart<Region> {
                 "select INDEX",
                 "undo"
         );
+        commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.UP) {
+                event.consume();
+                navigateToPreviousInput();
+            } else if (event.getCode() == KeyCode.DOWN) {
+                event.consume();
+                navigateToNextInput();
+            }
+        });
+
         commandComboBox.getEditor().textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         historySnapshot = logic.getHistorySnapshot();
     }
 
-    /**
-     * Handles the key press event, {@code keyEvent}.
-     */
-    @FXML
-    private void handleKeyPress(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-        case UP:
-            // As up and down buttons will alter the position of the caret,
-            // consuming it causes the caret's position to remain unchanged
-            keyEvent.consume();
-
-            navigateToPreviousInput();
-            break;
-        case DOWN:
-            keyEvent.consume();
-            navigateToNextInput();
-            break;
-        default:
-            // let JavaFx handle the keypress
-        }
-    }
 
     /**
      * Updates the text field with the previous input in {@code historySnapshot},
@@ -119,12 +109,14 @@ public class CommandBox extends UiPart<Region> {
      */
     @FXML
     private void handleCommandInputChanged() {
+        if (commandTextField.getText().equals("")) {
+            return;
+        }
         try {
             CommandResult commandResult = logic.execute(commandTextField.getText());
             initHistory();
-            historySnapshot.next();
-            // process result of the command
             commandComboBox.setValue("");
+            historySnapshot.increaseIndexByOne();
             setStyleToDefault();
             logger.info("Result: " + commandResult.feedbackToUser);
             raise(new NewResultAvailableEvent(commandResult.feedbackToUser));
