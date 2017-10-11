@@ -52,7 +52,7 @@ public class CommandBox extends UiPart<Region> {
                 "redo",
                 "select INDEX",
                 "undo"
-                );
+        );
         commandComboBox.getEditor().textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         historySnapshot = logic.getHistorySnapshot();
     }
