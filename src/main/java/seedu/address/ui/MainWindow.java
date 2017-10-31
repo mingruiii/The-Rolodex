@@ -15,11 +15,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import seedu.address.commons.core.Config;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.StarWars;
-import seedu.address.commons.events.ui.ExitAppRequestEvent;
 import seedu.address.commons.events.ui.ShowHelpRequestEvent;
 import seedu.address.commons.events.ui.StarWarsEvent;
 import seedu.address.commons.util.FxViewUtil;
@@ -239,7 +239,7 @@ public class MainWindow extends UiPart<Region> {
      */
     @FXML
     private void handleExit() {
-        raise(new ExitAppRequestEvent());
+        primaryStage.fireEvent(new WindowEvent(primaryStage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     @Subscribe

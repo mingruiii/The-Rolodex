@@ -36,10 +36,14 @@ public class LogicManager extends ComponentManager implements Logic {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
         try {
             Command command = rolodexParser.parseCommand(commandText);
-            command.setData(model, history, undoRedoStack);
-            CommandResult result = command.execute();
-            undoRedoStack.push(command);
-            return result;
+            if (command != null) {
+                command.setData(model, history, undoRedoStack);
+                CommandResult result = command.execute();
+                undoRedoStack.push(command);
+                return result;
+            } else {
+                return null;
+            }
         } finally {
             history.add(commandText);
         }

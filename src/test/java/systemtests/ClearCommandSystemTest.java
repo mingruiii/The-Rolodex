@@ -4,6 +4,8 @@ import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
+import guitests.GuiRobot;
+import javafx.scene.input.KeyCode;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.RedoCommand;
@@ -12,6 +14,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 
 public class ClearCommandSystemTest extends RolodexSystemTest {
+
+    private GuiRobot guiRobot = new GuiRobot();
 
     @Test
     public void clear() {
@@ -32,7 +36,7 @@ public class ClearCommandSystemTest extends RolodexSystemTest {
         /* Case: redo clearing rolodex -> cleared */
         command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, expectedResultMessage, new ModelManager());
+        assertCommandSuccessAfterPressingEnter(command, expectedResultMessage, new ModelManager());
         assertSelectedCardUnchanged();
 
         /* Case: selects first card in person list and clears rolodex -> cleared and no card selected */
@@ -61,7 +65,7 @@ public class ClearCommandSystemTest extends RolodexSystemTest {
      * @see RolodexSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandSuccess(String command) {
-        assertCommandSuccess(command, ClearCommand.MESSAGE_SUCCESS, new ModelManager());
+        assertCommandSuccessAfterPressingEnter(command, ClearCommand.MESSAGE_SUCCESS, new ModelManager());
     }
 
     /**
@@ -71,6 +75,19 @@ public class ClearCommandSystemTest extends RolodexSystemTest {
      */
     private void assertCommandSuccess(String command, String expectedResultMessage, Model expectedModel) {
         executeCommand(command);
+        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
+        assertCommandBoxShowsDefaultStyle();
+        assertStatusBarUnchangedExceptSyncStatus();
+    }
+
+    /**
+     * Performs the same verification as {@code assertCommandSuccess(String, String, Model)} except that enter key is
+     * pressed to select OK on the confirmation alert
+     */
+    private void assertCommandSuccessAfterPressingEnter(String command, String expectedResultMessage,
+                                                        Model expectedModel) {
+        executeCommand(command);
+        guiRobot.push(KeyCode.ENTER);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertStatusBarUnchangedExceptSyncStatus();

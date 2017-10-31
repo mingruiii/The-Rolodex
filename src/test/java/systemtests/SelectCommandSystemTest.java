@@ -83,7 +83,7 @@ public class SelectCommandSystemTest extends RolodexSystemTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: select from empty rolodex -> rejected */
-        executeCommand(ClearCommand.COMMAND_WORD);
+        executeCommandAndEnter(ClearCommand.COMMAND_WORD);
         assert getModel().getRolodex().getPersonList().size() == 0;
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased(),
                 MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);

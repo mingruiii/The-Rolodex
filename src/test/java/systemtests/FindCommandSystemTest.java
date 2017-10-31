@@ -85,7 +85,7 @@ public class FindCommandSystemTest extends RolodexSystemTest {
         assertCommandFailure(command, expectedResultMessage);
 
         /* Case: find same persons in rolodex after deleting 1 of them -> 2 person found */
-        executeCommand(DeleteCommand.COMMAND_WORD + " 1");
+        executeCommandAndEnter(DeleteCommand.COMMAND_WORD + " 1");
         assert !getModel().getRolodex().getPersonList().contains(BENSON);
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
@@ -162,7 +162,7 @@ public class FindCommandSystemTest extends RolodexSystemTest {
         assertSelectedCardDeselected();
 
         /* Case: find person in empty rolodex -> 0 persons found */
-        executeCommand(ClearCommand.COMMAND_WORD);
+        executeCommandAndEnter(ClearCommand.COMMAND_WORD);
         assert getModel().getRolodex().getPersonList().size() == 0;
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();

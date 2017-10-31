@@ -126,7 +126,7 @@ public class AddCommandSystemTest extends RolodexSystemTest {
         assertCommandSuccess(IDA);
 
         /* Case: add to empty rolodex -> added */
-        executeCommand(ClearCommand.COMMAND_WORD);
+        executeCommandAndEnter(ClearCommand.COMMAND_WORD);
         assert getModel().getRolodex().getPersonList().size() == 0;
         assertCommandSuccess(ALICE);
 

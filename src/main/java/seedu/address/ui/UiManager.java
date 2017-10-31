@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -7,6 +8,7 @@ import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import seedu.address.MainApp;
@@ -14,8 +16,10 @@ import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.Config;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.storage.DataSavingExceptionEvent;
+import seedu.address.commons.events.ui.ExitAppRequestEvent;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
+import seedu.address.logic.commands.ExitCommand;
 import seedu.address.model.UserPrefs;
 
 /**
@@ -62,6 +66,17 @@ public class UiManager extends ComponentManager implements Ui {
             logger.severe(StringUtil.getDetails(e));
             showFatalErrorDialogAndShutdown("Fatal error during initializing", e);
         }
+
+        primaryStage.setOnCloseRequest(event -> {
+            //raise(new ExitAppRequestEvent());
+            Optional<ButtonType> clickedButton = showAlertDialogAndGetResult(Alert.AlertType.CONFIRMATION,
+                    "Rolodex", ExitCommand.COMMAND_WORD, ExitCommand.CONFIRMATION_MESSAGE);
+            if (clickedButton.get() == ButtonType.OK) {
+                raise(new ExitAppRequestEvent());
+            } else {
+                event.consume();
+            }
+        });
     }
 
     @Override
@@ -80,14 +95,21 @@ public class UiManager extends ComponentManager implements Ui {
     }
 
     void showAlertDialogAndWait(Alert.AlertType type, String title, String headerText, String contentText) {
-        showAlertDialogAndWait(mainWindow.getPrimaryStage(), type, title, headerText, contentText);
+        showAlertDialog(mainWindow.getPrimaryStage(), type, title, headerText, contentText).showAndWait();
+    }
+
+    @Override
+    public Optional<ButtonType> showAlertDialogAndGetResult(AlertType type, String title, String headerText,
+                                                             String contentText) {
+        return showAlertDialog(mainWindow.getPrimaryStage(), type, title, headerText, contentText).showAndWait();
     }
 
     /**
      * Shows an alert dialog on {@code owner} with the given parameters.
      * This method only returns after the user has closed the alert dialog.
      */
-    private static void showAlertDialogAndWait(Stage owner, AlertType type, String title, String headerText,
+
+    private static Alert showAlertDialog(Stage owner, AlertType type, String title, String headerText,
                                                String contentText) {
         final Alert alert = new Alert(type);
         alert.getDialogPane().getStylesheets().add("view/LightTheme.css");
@@ -96,8 +118,9 @@ public class UiManager extends ComponentManager implements Ui {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.getDialogPane().setId(ALERT_DIALOG_PANE_FIELD_ID);
-        alert.showAndWait();
+        return alert;
     }
+
 
     /**
      * Shows an error alert dialog with {@code title} and error message, {@code e},

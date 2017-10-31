@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import guitests.GuiRobot;
+import javafx.scene.input.KeyCode;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.SortArgument;
 import seedu.address.model.Model;
@@ -57,6 +59,8 @@ public class CommandTestUtil {
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
 
+    private static GuiRobot guiRobot = new GuiRobot();
+
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
@@ -75,6 +79,23 @@ public class CommandTestUtil {
             Model expectedModel) {
         try {
             CommandResult result = command.execute();
+            assertEquals(expectedMessage, result.feedbackToUser);
+            assertEquals(expectedModel, actualModel);
+        } catch (CommandException ce) {
+            throw new AssertionError("Execution of command should not fail.", ce);
+        }
+    }
+
+    /**
+     * Executes the given {@code command}, press enter to select OK on the confirmation alert, then confirms that <br>
+     * - the result message matches {@code expectedMessage} <br>
+     * - the {@code actualModel} matches {@code expectedModel}
+     */
+    public static void assertCommandSuccessAfterEnter(Command command, Model actualModel, String expectedMessage,
+                                            Model expectedModel) {
+        try {
+            CommandResult result = command.execute();
+            guiRobot.push(KeyCode.ENTER);
             assertEquals(expectedMessage, result.feedbackToUser);
             assertEquals(expectedModel, actualModel);
         } catch (CommandException ce) {

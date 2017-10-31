@@ -90,6 +90,7 @@ public class KeyListenerTest extends RolodexGuiTest {
         assertEquals(UndoCommand.MESSAGE_FAILURE, getResultDisplay().getText());
 
         getCommandBox().run("delete 1");
+        guiRobot.push(KeyCode.ENTER);
         guiRobot.push(undoKeyCode);
         assertEquals(UndoCommand.MESSAGE_SUCCESS, getResultDisplay().getText());
     }
@@ -103,6 +104,7 @@ public class KeyListenerTest extends RolodexGuiTest {
         assertEquals(RedoCommand.MESSAGE_FAILURE, getResultDisplay().getText());
 
         getCommandBox().run("delete 1");
+        guiRobot.push(KeyCode.ENTER);
         getCommandBox().run("undo");
 
         guiRobot.push(redoKeyCode);
@@ -114,6 +116,7 @@ public class KeyListenerTest extends RolodexGuiTest {
         KeyCodeCombination clearKeyCode = (KeyCodeCombination) KeyCombination.valueOf("Ctrl+Shift+C");
 
         guiRobot.push(clearKeyCode);
+        guiRobot.push(KeyCode.ENTER);
         assertEquals(ClearCommand.MESSAGE_SUCCESS, getResultDisplay().getText());
     }
 
@@ -134,6 +137,7 @@ public class KeyListenerTest extends RolodexGuiTest {
 
         String command1 = "clear";
         getCommandBox().run(command1);
+        guiRobot.push(KeyCode.ENTER);
         guiRobot.push(viewHistoryKeyCode);
 
         String expectedMessage = String.format(HistoryCommand.MESSAGE_SUCCESS,

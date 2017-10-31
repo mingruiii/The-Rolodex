@@ -11,6 +11,8 @@ import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
+import guitests.GuiRobot;
+import javafx.scene.input.KeyCode;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
@@ -24,6 +26,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
 
     private static final String MESSAGE_INVALID_DELETE_COMMAND_FORMAT =
             String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE);
+    private GuiRobot guiRobot = new GuiRobot();
 
     @Test
     public void delete() {
@@ -34,7 +37,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         String command = "     " + DeleteCommand.COMMAND_WORD + "      " + INDEX_FIRST_PERSON.getOneBased() + "       ";
         ReadOnlyPerson deletedPerson = removePerson(expectedModel, INDEX_FIRST_PERSON);
         String expectedResultMessage = String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedPerson);
-        assertCommandSuccess(command, expectedModel, expectedResultMessage);
+        assertCommandSuccessAfterPressingEnter(command, expectedModel, expectedResultMessage);
 
         /* Case: delete the last person in the list -> deleted */
         Model modelBeforeDeletingLast = getModel();
@@ -50,7 +53,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         command = RedoCommand.COMMAND_WORD;
         removePerson(modelBeforeDeletingLast, lastPersonIndex);
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        assertCommandSuccess(command, modelBeforeDeletingLast, expectedResultMessage);
+        assertCommandSuccessAfterPressingEnter(command, modelBeforeDeletingLast, expectedResultMessage);
 
         /* Case: delete the middle person in the list -> deleted */
         Index middlePersonIndex = getMidIndex(getModel());
@@ -83,7 +86,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         command = DeleteCommand.COMMAND_WORD_ABBREVIATIONS.iterator().next() + " " + selectedIndex.getOneBased();
         deletedPerson = removePerson(expectedModel, selectedIndex);
         expectedResultMessage = String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedPerson);
-        assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
+        assertCommandSuccessAfterPressingEnter(command, expectedModel, expectedResultMessage, expectedIndex);
 
         /* --------------------------------- Performing invalid delete operation ------------------------------------ */
 
@@ -133,7 +136,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         ReadOnlyPerson deletedPerson = removePerson(expectedModel, toDelete);
         String expectedResultMessage = String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedPerson);
 
-        assertCommandSuccess(
+        assertCommandSuccessAfterPressingEnter(
                 DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased(), expectedModel, expectedResultMessage);
     }
 
@@ -160,7 +163,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
      * @see RolodexSystemTest#assertSelectedCardChanged(Index)
      */
     private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage,
-            Index expectedSelectedCardIndex) {
+                                      Index expectedSelectedCardIndex) {
         executeCommand(command);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
 
@@ -174,6 +177,31 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         assertStatusBarUnchangedExceptSyncStatus();
     }
 
+
+    private void assertCommandSuccessAfterPressingEnter(String command, Model expectedModel,
+                                                        String expectedResultMessage) {
+        assertCommandSuccessAfterPressingEnter(command, expectedModel, expectedResultMessage, null);
+    }
+
+    /**
+     * Performs the same verification as {@code assertCommandSuccess(String, Model, String, Index)}, except that enter
+     * key is pressed to select OK on the confirmation alert
+     */
+    private void assertCommandSuccessAfterPressingEnter(String command, Model expectedModel,
+                                                        String expectedResultMessage, Index expectedSelectedCardIndex) {
+        executeCommand(command);
+        guiRobot.push(KeyCode.ENTER);
+        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
+
+        if (expectedSelectedCardIndex != null) {
+            assertSelectedCardChanged(expectedSelectedCardIndex);
+        } else {
+            assertSelectedCardUnchanged();
+        }
+
+        assertCommandBoxShowsDefaultStyle();
+        assertStatusBarUnchangedExceptSyncStatus();
+    }
     /**
      * Executes {@code command} and in addition,<br>
      * 1. Asserts that the command box displays {@code command}.<br>
@@ -189,6 +217,7 @@ public class DeleteCommandSystemTest extends RolodexSystemTest {
         Model expectedModel = getModel();
 
         executeCommand(command);
+        guiRobot.push(KeyCode.ENTER);
         assertApplicationDisplaysExpected(command, expectedResultMessage, expectedModel);
         assertSelectedCardUnchanged();
         assertCommandBoxShowsErrorStyle();

@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import guitests.RolodexGuiTest;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
@@ -18,7 +19,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 
 
-public class LogicManagerTest {
+public class LogicManagerTest extends RolodexGuiTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 

@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 
+import guitests.GuiRobot;
 import guitests.guihandles.CommandBoxHandle;
 import guitests.guihandles.MainMenuHandle;
 import guitests.guihandles.MainWindowHandle;
@@ -22,6 +23,7 @@ import guitests.guihandles.PersonDetailPanelHandle;
 import guitests.guihandles.PersonListPanelHandle;
 import guitests.guihandles.ResultDisplayHandle;
 import guitests.guihandles.StatusBarFooterHandle;
+import javafx.scene.input.KeyCode;
 import seedu.address.TestApp;
 import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.index.Index;
@@ -48,6 +50,7 @@ public abstract class RolodexSystemTest {
     private MainWindowHandle mainWindowHandle;
     private TestApp testApp;
     private SystemTestSetupHelper setupHelper;
+    private GuiRobot guiRobot = new GuiRobot();
 
     @BeforeClass
     public static void setupBeforeClass() {
@@ -103,6 +106,20 @@ public abstract class RolodexSystemTest {
         clockRule.setInjectedClockToCurrentTime();
 
         mainWindowHandle.getCommandBox().run(command);
+    }
+
+    /**
+     * Performs the same execution as {@code executeCommand(String,)}, except that enter key is pressed to select OK
+     * on the confirmation alert
+     */
+    protected void executeCommandAndEnter(String command) {
+        rememberStates();
+        // Injects a fixed clock before executing a command so that the time stamp shown in the status bar
+        // after each command is predictable and also different from the previous command.
+        clockRule.setInjectedClockToCurrentTime();
+
+        mainWindowHandle.getCommandBox().run(command);
+        guiRobot.push(KeyCode.ENTER);
     }
 
     /**

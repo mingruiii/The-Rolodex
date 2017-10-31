@@ -5,13 +5,14 @@ import static seedu.address.testutil.TypicalPersons.getTypicalRolodex;
 
 import org.junit.Test;
 
+import guitests.RolodexGuiTest;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.UndoRedoStack;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 
-public class ClearCommandTest {
+public class ClearCommandTest extends RolodexGuiTest {
 
     @Test
     public void executeEmptyRolodexSuccess() {

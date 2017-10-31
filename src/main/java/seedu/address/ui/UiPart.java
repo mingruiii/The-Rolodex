@@ -47,6 +47,9 @@ public abstract class UiPart<T> {
         this(fxmlFileName != null ? MainApp.class.getResource(FXML_FILE_FOLDER + fxmlFileName) : null);
     }
 
+    protected UiPart() {
+    }
+
     /**
      * Returns the root object of the scene graph of this UiPart.
      */

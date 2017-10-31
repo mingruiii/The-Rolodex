@@ -3,7 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccessAfterEnter;
 import static seedu.address.logic.commands.CommandTestUtil.showFirstPersonOnly;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -11,6 +11,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalRolodex;
 
 import org.junit.Test;
 
+import guitests.RolodexGuiTest;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
@@ -23,7 +24,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code DeleteCommand}.
  */
-public class DeleteCommandTest {
+public class DeleteCommandTest extends RolodexGuiTest {
 
     private Model model = new ModelManager(getTypicalRolodex(), new UserPrefs());
 
@@ -37,7 +38,7 @@ public class DeleteCommandTest {
         ModelManager expectedModel = new ModelManager(model.getRolodex(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccessAfterEnter(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -61,7 +62,7 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(personToDelete);
         showNoPerson(expectedModel);
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccessAfterEnter(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test

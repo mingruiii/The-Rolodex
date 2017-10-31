@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.application.Platform;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.ConfirmationDialog;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -28,8 +30,10 @@ public class DeleteCommand extends UndoableCommand {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String CONFIRMATION_MESSAGE = "Are you sure you want to delete this contact?";
 
     private final Index targetIndex;
+    private ConfirmationDialog deleteConfirmationDialog;
 
     public DeleteCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
@@ -47,13 +51,18 @@ public class DeleteCommand extends UndoableCommand {
 
         ReadOnlyPerson personToDelete = lastShownList.get(targetIndex.getZeroBased());
 
-        try {
-            model.deletePerson(personToDelete);
-        } catch (PersonNotFoundException pnfe) {
-            assert false : "The target person cannot be missing";
-        }
-
+        Platform.runLater(() -> {
+            deleteConfirmationDialog = new ConfirmationDialog(COMMAND_WORD, CONFIRMATION_MESSAGE);
+            if (deleteConfirmationDialog.goAhead()) {
+                try {
+                    model.deletePerson(personToDelete);
+                } catch (PersonNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, personToDelete));
+
     }
 
     @Override
