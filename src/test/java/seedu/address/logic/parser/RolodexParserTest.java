@@ -49,7 +49,7 @@ import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
 
-public class RolodexParserTest extends RolodexGuiTest{
+public class RolodexParserTest extends RolodexGuiTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
