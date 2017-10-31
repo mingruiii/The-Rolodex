@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javafx.application.Platform;
 import seedu.address.logic.ConfirmationDialog;
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.events.ui.ClearPersonDetailPanelRequestEvent;
 import seedu.address.model.Rolodex;
 
 /**
@@ -34,6 +36,7 @@ public class ClearCommand extends UndoableCommand {
                     ClearCommand.CONFIRMATION_MESSAGE);
             if (clearConfirmationDialog.goAhead()) {
                 model.resetData(new Rolodex());
+              EventsCenter.getInstance().post(new ClearPersonDetailPanelRequestEvent());
             }
         });
         return new CommandResult(MESSAGE_SUCCESS);
