@@ -1592,7 +1592,8 @@ Use case ends.
 1.  User hits an alphabet key
 2.  Rolodex drops down a list of possible commands
 3.  User requests to select a specific command in the list
-4.  Rolodex appends the remainder of the command into the input box
+4.  User presses `Tab` to activate auto-completion
+5.  Rolodex appends the remainder of the command format into the input box
 +
 Use case ends.
 
