@@ -64,6 +64,8 @@ include::../DeveloperGuide.adoc[leveloffset=1,tag=email]
 
 ==== External behavior
 
+The table below shows all auto-complete command shortcuts.
+
 include::../UserGuide.adoc[leveloffset=2,tag=auto-complete-shortcut]
 
 ==== Justification
